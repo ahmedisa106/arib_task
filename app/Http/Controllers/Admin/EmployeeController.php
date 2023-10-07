@@ -8,8 +8,10 @@ use App\Http\Requests\EmployeeRequest;
 use App\Repositories\DepartmentRepo;
 use App\Repositories\EmployeeRepo;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 
 class EmployeeController extends ParentController
@@ -37,7 +39,7 @@ class EmployeeController extends ParentController
     {
         $this->data['section_title'] = $this->repo->model->getTable();
         $this->data['section_sub_title'] = "create new  " . Str::singular($this->repo->model->getTable());
-        $this->data['departments'] = $this->departmentRepo->getData(request: request(), columns: ['id', 'name'], pagination: false);
+        $this->data['departments'] = $this->getDepartments();
         return \view($this->path . '.create', $this->data);
     }// end of create function
 
@@ -51,9 +53,17 @@ class EmployeeController extends ParentController
         $this->data['model'] = $model;
         $this->data['section_title'] = $this->repo->model->getTable();
         $this->data['section_sub_title'] = "Edit   " . Str::singular($this->repo->model->getTable());
-        $this->data['departments'] = $this->departmentRepo->getData(request: request(), columns: ['id', 'name'], pagination: false);
+        $this->data['departments'] = $this->getDepartments();
         return \view($this->path . '.edit', $this->data);
     }// end of edit function
+
+    /**
+     * @return Collection|LengthAwarePaginator|array
+     */
+    public function getDepartments(): \Illuminate\Database\Eloquent\Collection|\Illuminate\Contracts\Pagination\LengthAwarePaginator|array
+    {
+        return $this->departmentRepo->getData(request: request(), columns: ['id', 'name'], pagination: false);
+    }// end of getDepartments function
 }
 
 

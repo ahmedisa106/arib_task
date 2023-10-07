@@ -17,13 +17,16 @@
 `composer install`
 <br>
 
-`php artsian key:generate`
+`php artisan key:generate`
 <br>
 
-`php artsian migrate --seed`
+`php artisan migrate --seed`
 <br>
 
-`php artsian jwt:secret`
+`php artisan jwt:secret`
 <br>
 
-`php artsian serve`
+`php artisan storage:link`
+<br>
+
+`php artisan serve`

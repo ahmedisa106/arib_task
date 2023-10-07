@@ -33,7 +33,7 @@ class TaskController extends ParentController
     {
         $this->data['section_title'] = $this->repo->model->getTable();
         $this->data['section_sub_title'] = "create new  " . Str::singular($this->repo->model->getTable());
-        $this->data['employees'] = auth('manager')->user()->employees()->get(['employees.id', 'employees.first_name', 'employees.last_name']);
+        $this->data['employees'] = $this->getEmployees();
         return \view($this->path . '.create', $this->data);
     }
 
@@ -47,7 +47,15 @@ class TaskController extends ParentController
         $this->data['model'] = $model;
         $this->data['section_title'] = $this->repo->model->getTable();
         $this->data['section_sub_title'] = "Edit   " . Str::singular($this->repo->model->getTable());
-        $this->data['employees'] = auth('manager')->user()->employees()->get(['employees.id', 'employees.first_name', 'employees.last_name']);
+        $this->data['employees'] = $this->getEmployees();
         return \view($this->path . '.edit', $this->data);
     }// end of edit function
+
+    /**
+     * @return mixed
+     */
+    public function getEmployees(): mixed
+    {
+        return auth('manager')->user()->employees()->get(['employees.id', 'employees.first_name', 'employees.last_name']);
+    }// end of getEmployees function
 }

@@ -7,8 +7,10 @@ use App\Http\Requests\DepartmentRequest;
 use App\Repositories\DepartmentRepo;
 use App\Repositories\ManagerRepo;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 
@@ -38,7 +40,7 @@ class DepartmentController extends ParentController
     {
         $this->data['section_title'] = $this->repo->model->getTable();
         $this->data['section_sub_title'] = "create new  " . Str::singular($this->repo->model->getTable());
-        $this->data['managers'] = $this->managerRepo->getData(request: request(), columns: ['id', 'name'], pagination: false);
+        $this->data['managers'] = $this->getManagers();
         return \view($this->path . '.create', $this->data);
     }// end of create function
 
@@ -52,7 +54,7 @@ class DepartmentController extends ParentController
         $this->data['model'] = $model;
         $this->data['section_title'] = $this->section_title;
         $this->data['section_sub_title'] = "edit department ($model->id) ";
-        $this->data['managers'] = $this->managerRepo->getData(request: request(), columns: ['id', 'name'], pagination: false);
+        $this->data['managers'] = $this->getManagers();
         return \view($this->path . '.edit', $this->data);
     }// end of edit function
 
@@ -73,4 +75,12 @@ class DepartmentController extends ParentController
         return response()->json($data, 400);
     }// end of destroy function
 
+
+    /**
+     * @return Collection|LengthAwarePaginator|array
+     */
+    public function getManagers(): \Illuminate\Database\Eloquent\Collection|\Illuminate\Contracts\Pagination\LengthAwarePaginator|array
+    {
+        return $this->managerRepo->getData(request: request(), columns: ['id', 'name'], pagination: false);
+    }// end of getManagers function
 }
