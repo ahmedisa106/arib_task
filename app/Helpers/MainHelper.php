@@ -21,7 +21,7 @@ if (!function_exists('getFile')) {
     }
 }
 
-if (!function_exists('pagination_url')) {
+if (!function_exists('pagination_urls')) {
     function pagination_urls($model)
     {
         if (is_object($model)) {
